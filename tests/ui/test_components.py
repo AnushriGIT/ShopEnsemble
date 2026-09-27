@@ -126,9 +126,12 @@ def test_clarification_shape():
 
 
 def test_fallback_shape():
-    at = _run({"message": "I don't have a specialized agent for that kind of request yet."})
+    # Phase 7: renders as an informational box, not a warning — the message
+    # states a positive next step (what the assistant CAN do), so a
+    # warning-styled box would misrepresent it, especially for a greeting.
+    at = _run({"message": "I don't have a way to help with that specific request, but I can find products."})
 
-    assert at.warning[0].value == "I don't have a specialized agent for that kind of request yet."
+    assert at.info[0].value == "I don't have a way to help with that specific request, but I can find products."
 
 
 def test_error_shape():
@@ -141,3 +144,67 @@ def test_unrecognized_shape_shows_a_generic_error_instead_of_crashing():
     at = _run({"unexpected_field": "value"})
 
     assert "unrecognized" in at.error[0].value.lower()
+
+
+# --- Phase 5 Part A: the Product ID must be visible wherever a product is shown
+# (spec: shopensemble-coordinator-agent-phase5-session-memory-spec.md, A1). The
+# ID is the key every follow-up question is asked with, so a card without it
+# leaves the customer unable to reuse what they were just shown.
+
+_CARD_PRODUCTS = [
+    {
+        "id": "SPK0012",
+        "name": "SoundWave",
+        "brand": "SoundCo",
+        "category": "speaker",
+        "price": "51.16",
+        "description": "Compact design.",
+        "stock": 10,
+        "rating": 4.5,
+    },
+    {
+        "id": "LP0002",
+        "name": "Ultra Thin",
+        "brand": "TechCo",
+        "category": "laptop",
+        "price": "372.5",
+        "description": "17 inch laptop.",
+        "stock": 160,
+        "rating": 3.7,
+    },
+]
+
+
+def test_recommendation_cards_show_each_product_id_in_a_code_span():
+    # Regression for the reported gap: cards showed name/brand/price but no ID.
+    at = _run({"rationale": "Both fit.", "products": _CARD_PRODUCTS})
+
+    markdown_values = [m.value for m in at.markdown]
+    assert "**SoundWave** (SoundCo) · `SPK0012`" in markdown_values
+    assert "**Ultra Thin** (TechCo) · `LP0002`" in markdown_values
+
+
+def test_comparison_cards_show_each_product_id_in_a_code_span():
+    at = _run({"differences": ["Different categories"], "products": _CARD_PRODUCTS})
+
+    markdown_values = [m.value for m in at.markdown]
+    assert any("`SPK0012`" in v for v in markdown_values)
+    assert any("`LP0002`" in v for v in markdown_values)
+
+
+def test_multiple_review_summaries_render_one_labelled_block_per_product():
+    # Phase 5 spec B5: the new "summaries" response shape renders one existing
+    # review-summary block per product, each headed with its Product ID.
+    data = {
+        "summaries": [
+            {"product_id": "SP0001", "summary": "Great phone.", "sentiment": "positive", "review_count": 3},
+            {"product_id": "LP0002", "summary": "Decent laptop.", "sentiment": "mixed", "review_count": 5},
+        ]
+    }
+    at = _run(data)
+
+    subheaders = [s.value for s in at.subheader]
+    assert subheaders == ["Reviews for SP0001", "Reviews for LP0002"]
+    markdown_values = [m.value for m in at.markdown]
+    assert "Great phone." in markdown_values
+    assert "Decent laptop." in markdown_values

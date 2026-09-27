@@ -20,34 +20,10 @@ quarantine/
 CLAUDE.md
 AGENTS.md
 
-# Kept local-only per project decision: implementation *plans* live in
-# plans/ (see plans/*/*-implementation-plan.md), moved out of specs/
-# (2026-09-17) so specs/ holds only specifications — and, per a follow-up
-# decision the same day, plans/ itself is kept local-only too (untracked),
-# not pushed. specs/ itself still excludes specifications, architecture/
-# data-model docs, and internal working notes:
-plans/
+# Kept local-only: internal working notes and raw course/reference material,
+# not needed to build, run, or understand the shipped project. specs/ (what
+# was built and why), plans/ (how), skills/ (tooling), and app/agents+api
+# (the actual implementation) are all tracked — see README.md.
 memory-bank/
 DATA_PIPELINE_RESOURCES.md
-specs/shopensemble-project-requirements.md
-specs/1_data-pipeline/shopensemble-data-models.md
-specs/1_data-pipeline/data_pipeline_shopensemble_spec.md
-specs/1_data-pipeline/shopensemble-implementation-guide.md
-specs/2_coordinator-agent/shopensemble-coordinator-agent-spec.md
-specs/2_coordinator-agent/shopensemble-coordinator-agent-phase3a-part2-groundedness-spec.md
-specs/2_coordinator-agent/shopensemble-coordinator-agent-phase4c-catalog-browse-spec.md
-
-# Reference/learning material kept local-only
 Reference/
-
-# Agentic AI implementation kept local-only for now
-app/agents/
-tests/agents/
-
-# API layer kept local-only too — it imports directly from app/agents/,
-# which is untracked, so tracking it alone would push unresolvable imports
-app/api/
-tests/api/
-
-# Skills/tooling templates kept local-only
-skills/

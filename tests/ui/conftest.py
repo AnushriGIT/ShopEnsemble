@@ -28,18 +28,26 @@ class FakeClient:
         self._products_response = products_response if products_response is not None else []
         self._products_error = products_error
         self.last_query: str | None = None
+        self.last_session_id: str | None = None
+        self.session_ids_seen: list[str | None] = []
+        self.deleted_session_ids: list[str] = []
         self.call_count = 0
         self.list_products_call_count = 0
 
     def health(self) -> dict:
         return {"status": "ok"}
 
-    def query(self, text: str) -> dict:
+    def query(self, text: str, session_id: str | None = None) -> dict:
         self.call_count += 1
         self.last_query = text
+        self.last_session_id = session_id
+        self.session_ids_seen.append(session_id)
         if self._query_error is not None:
             raise ShopEnsembleAPIError(self._query_error)
         return self._query_response
+
+    def delete_session(self, session_id: str) -> None:
+        self.deleted_session_ids.append(session_id)
 
     def list_products(self) -> list[dict]:
         self.list_products_call_count += 1

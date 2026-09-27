@@ -3,7 +3,7 @@
 Run with the FastAPI backend already up:
 
     uvicorn app.api.main:app --reload
-    streamlit run app/ui/streamlit_app.py
+    streamlit run app/ui/ShopEnsemble_App.py
 
 Phase 4c implementation plan: this used to be the conversational chat
 assistant — that workflow moved, essentially unchanged, to
@@ -20,7 +20,7 @@ about. Read-only, no LLM/coordinator call anywhere on this page (GET
 import sys
 from pathlib import Path
 
-# `streamlit run app/ui/streamlit_app.py` only ever adds this script's own
+# `streamlit run app/ui/ShopEnsemble_App.py` only ever adds this script's own
 # directory (app/ui/) to sys.path — never the project root — regardless of
 # which directory the command is launched from (verified against the
 # installed streamlit package's own web/bootstrap.py::_fix_sys_path).

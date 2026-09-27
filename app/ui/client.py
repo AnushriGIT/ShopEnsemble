@@ -68,8 +68,13 @@ class ShopEnsembleAPIClient:
             raise ShopEnsembleAPIError(f"Request failed (HTTP {response.status_code}).")
         return response.json()
 
-    def query(self, text: str) -> dict:
+    def query(self, text: str, session_id: str | None = None) -> dict:
         """POST /query and return the parsed JSON response body.
+
+        ``session_id`` (Phase 5) identifies one chat conversation so the server
+        can remember what was already said in it. It is sent only when given —
+        the form-based pages never pass one, and their request body stays
+        exactly ``{"query": ...}`` as before.
 
         Raises ``ShopEnsembleAPIError`` with a safe, displayable message for
         every failure mode — connection refused, a timeout, a validation
@@ -78,7 +83,10 @@ class ShopEnsembleAPIClient:
         """
 
         try:
-            response = self._client.post("/query", json={"query": text})
+            payload = {"query": text}
+            if session_id is not None:
+                payload["session_id"] = session_id
+            response = self._client.post("/query", json=payload)
         except httpx.ConnectError as error:
             raise ShopEnsembleAPIError(f"Can't reach the ShopEnsemble API at {self._base_url}.") from error
         except httpx.TimeoutException as error:
@@ -99,6 +107,22 @@ class ShopEnsembleAPIClient:
             raise ShopEnsembleAPIError(message)
 
         return response.json()
+
+    def delete_session(self, session_id: str) -> None:
+        """Ask the server to forget a conversation ("New chat"). Best-effort.
+
+        Never raises: the server's idle TTL is the backstop that eventually
+        frees the memory anyway, so a failed cleanup (server down, timeout, a
+        non-2xx reply) must not surface to — or break — the page that
+        triggered it.
+        """
+
+        try:
+            # Header, not URL path: the ID is a bearer secret and URLs are
+            # logged by servers, proxies and httpx itself (see routes.py).
+            self._client.delete("/session", headers={"X-Session-ID": session_id})
+        except httpx.HTTPError:
+            pass  # deliberately swallowed; see docstring
 
 
 @st.cache_resource

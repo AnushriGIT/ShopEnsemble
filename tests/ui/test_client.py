@@ -68,3 +68,69 @@ def test_health_raises_on_connection_error():
 
     with pytest.raises(ShopEnsembleAPIError, match="Can't reach the ShopEnsemble API"):
         _client(handler).health()
+
+
+# --- Phase 5 spec B8: session_id on query(), best-effort delete_session() ------
+
+
+def test_query_sends_the_session_id_when_given():
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["body"] = request.read()
+        return httpx.Response(200, json={"message": "ok"})
+
+    _client(handler).query("hello", session_id="a" * 32)
+
+    import json
+
+    assert json.loads(seen["body"]) == {"query": "hello", "session_id": "a" * 32}
+
+
+def test_query_omits_the_session_id_field_when_none():
+    # The form-based pages never pass one, and their request body must stay
+    # exactly what it was before Phase 5.
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["body"] = request.read()
+        return httpx.Response(200, json={"message": "ok"})
+
+    _client(handler).query("hello")
+
+    import json
+
+    assert json.loads(seen["body"]) == {"query": "hello"}
+
+
+def test_delete_session_sends_the_id_in_a_header_never_in_the_url():
+    # The ID is a bearer secret and URLs get logged (uvicorn access log,
+    # proxies, httpx's own INFO log) — so it must travel in a header.
+    seen = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen["method"], seen["url"] = request.method, str(request.url)
+        seen["header"] = request.headers.get("X-Session-ID")
+        return httpx.Response(204)
+
+    _client(handler).delete_session("b" * 32)
+
+    assert seen["method"] == "DELETE"
+    assert seen["url"] == "http://testserver/session"
+    assert "b" * 32 not in seen["url"]
+    assert seen["header"] == "b" * 32
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [
+        lambda request: (_ for _ in ()).throw(httpx.ConnectError("refused", request=request)),
+        lambda request: (_ for _ in ()).throw(httpx.TimeoutException("slow", request=request)),
+        lambda request: httpx.Response(500, json={"error": {"message": "boom"}}),
+    ],
+    ids=["connection-refused", "timeout", "server-error"],
+)
+def test_delete_session_never_raises_because_it_is_best_effort(failure):
+    # TTL expiry on the server is the backstop, so a failed cleanup must never
+    # surface to (or break) the page that triggered it.
+    _client(failure).delete_session("c" * 32)  # must simply return

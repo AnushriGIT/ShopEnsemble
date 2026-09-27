@@ -50,7 +50,7 @@ def test_catalog_page_loads_and_shows_every_product(fake_client_factory):
     st.cache_data.clear()
     fake = fake_client_factory(products_response=_SAMPLE_PRODUCTS)
 
-    at = _app_test("app/ui/streamlit_app.py")
+    at = _app_test("app/ui/ShopEnsemble_App.py")
     at.run()
 
     assert not at.exception
@@ -65,7 +65,7 @@ def test_catalog_page_category_filter_narrows_results(fake_client_factory):
     st.cache_data.clear()
     fake_client_factory(products_response=_SAMPLE_PRODUCTS)
 
-    at = _app_test("app/ui/streamlit_app.py")
+    at = _app_test("app/ui/ShopEnsemble_App.py")
     at.run()
     at.selectbox[0].select("laptop").run()
 
@@ -77,7 +77,7 @@ def test_catalog_page_name_search_narrows_results(fake_client_factory):
     st.cache_data.clear()
     fake = fake_client_factory(products_response=_SAMPLE_PRODUCTS)
 
-    at = _app_test("app/ui/streamlit_app.py")
+    at = _app_test("app/ui/ShopEnsemble_App.py")
     at.run()
     at.text_input[0].set_value("Mobile").run()
 
@@ -90,7 +90,7 @@ def test_catalog_page_brand_filter_narrows_results(fake_client_factory):
     st.cache_data.clear()
     fake_client_factory(products_response=_SAMPLE_PRODUCTS)
 
-    at = _app_test("app/ui/streamlit_app.py")
+    at = _app_test("app/ui/ShopEnsemble_App.py")
     at.run()
     at.selectbox[1].select("ByteWorks").run()  # selectbox[0] is Category
 
@@ -102,7 +102,7 @@ def test_catalog_page_price_range_filter_narrows_results(fake_client_factory):
     st.cache_data.clear()
     fake_client_factory(products_response=_SAMPLE_PRODUCTS)
 
-    at = _app_test("app/ui/streamlit_app.py")
+    at = _app_test("app/ui/ShopEnsemble_App.py")
     at.run()
     # Slider bounds come from the real fetched data (588.48-999.99 here) -
     # an out-of-bounds range is silently clamped/ignored by Streamlit, not
@@ -117,7 +117,7 @@ def test_catalog_page_minimum_rating_filter_narrows_results(fake_client_factory)
     st.cache_data.clear()
     fake_client_factory(products_response=_SAMPLE_PRODUCTS)
 
-    at = _app_test("app/ui/streamlit_app.py")
+    at = _app_test("app/ui/ShopEnsemble_App.py")
     at.run()
     at.slider[1].set_value(4.5).run()  # excludes SP0001 at rating 4.0
 
@@ -129,7 +129,7 @@ def test_catalog_page_shows_a_friendly_error_on_api_failure(fake_client_factory)
     st.cache_data.clear()
     fake_client_factory(products_error="Can't reach the ShopEnsemble API at http://localhost:8000.")
 
-    at = _app_test("app/ui/streamlit_app.py")
+    at = _app_test("app/ui/ShopEnsemble_App.py")
     at.run()
 
     assert not at.exception
@@ -145,7 +145,8 @@ def test_chat_assistant_page_sends_the_typed_query_and_renders_the_response(fake
 
     assert not at.exception
     assert fake.last_query == "do you sell groceries?"
-    assert at.warning[0].value == "I don't have a specialized agent for that yet."
+    # Phase 7: fallback messages render as an informational box, not a warning.
+    assert at.info[0].value == "I don't have a specialized agent for that yet."
 
 
 def test_chat_assistant_page_shows_a_friendly_error_on_api_failure(fake_client_factory):
@@ -157,6 +158,77 @@ def test_chat_assistant_page_shows_a_friendly_error_on_api_failure(fake_client_f
 
     assert not at.exception
     assert "Can't reach the ShopEnsemble API" in at.error[0].value
+
+
+def test_chat_assistant_sends_the_same_32_hex_session_id_on_every_message(fake_client_factory):
+    # Phase 5 spec B8: one session_id per browser session, generated once, so
+    # the server can remember the conversation across turns.
+    fake = fake_client_factory(query_response={"message": "ok"})
+
+    at = _app_test("app/ui/pages/5_💬_Chat_Assistant.py")
+    at.run()
+    at.chat_input[0].set_value("first").run()
+    at.chat_input[0].set_value("second").run()
+
+    assert not at.exception
+    first, second = fake.session_ids_seen
+    assert first == second
+    assert len(first) == 32 and all(c in "0123456789abcdef" for c in first)
+
+
+def test_form_pages_send_no_session_id(fake_client_factory):
+    # The four form-based pages take explicit inputs by design — no hidden memory.
+    fake = fake_client_factory(query_response={"products": [], "rationale": "Nothing matched."})
+
+    at = _app_test("app/ui/pages/1_🎯_Recommendations.py")
+    at.run()
+    at.button[0].click().run()
+
+    assert fake.call_count >= 1
+    assert set(fake.session_ids_seen) == {None}
+
+
+def test_new_chat_clears_the_transcript_rotates_the_session_and_deletes_the_old_one(fake_client_factory):
+    fake = fake_client_factory(query_response={"message": "ok"})
+
+    at = _app_test("app/ui/pages/5_💬_Chat_Assistant.py")
+    at.run()
+    at.chat_input[0].set_value("hello").run()
+    old_session_id = fake.last_session_id
+    assert len(at.session_state["messages"]) == 2  # the user turn + the assistant reply
+
+    new_chat = next(button for button in at.sidebar.button if "New chat" in button.label)
+    new_chat.click().run()
+
+    assert not at.exception
+    assert at.session_state["messages"] == []
+    assert fake.deleted_session_ids == [old_session_id]  # the OLD id was cleared server-side
+    at.chat_input[0].set_value("after reset").run()
+    assert fake.last_session_id != old_session_id  # and a fresh id is used from now on
+
+
+def test_new_chat_does_not_break_the_page_when_the_delete_call_fails(monkeypatch):
+    # Real client (so the real best-effort swallowing is exercised) over a
+    # transport whose DELETE returns 500 — the page must still reset cleanly.
+    import httpx
+
+    from app.ui import client as client_module
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.method == "DELETE":
+            return httpx.Response(500, json={"error": {"message": "boom"}})
+        return httpx.Response(200, json={"message": "ok"})
+
+    real = client_module.ShopEnsembleAPIClient(base_url="http://testserver", transport=httpx.MockTransport(handler))
+    monkeypatch.setattr(client_module, "get_client", lambda: real)
+
+    at = _app_test("app/ui/pages/5_💬_Chat_Assistant.py")
+    at.run()
+    at.chat_input[0].set_value("hello").run()
+    next(button for button in at.sidebar.button if "New chat" in button.label).click().run()
+
+    assert not at.exception
+    assert at.session_state["messages"] == []
 
 
 def test_recommendations_page_composes_the_expected_query(fake_client_factory):
