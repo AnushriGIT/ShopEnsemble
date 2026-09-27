@@ -89,4 +89,4 @@ python -m pytest -m eval                                 # needs: OPENAI_API_KEY
 
 ## Status
 
-Data pipeline, coordinator agent (4 sub-agents), API layer (with rate limiting/caching/telemetry), and UI (6 pages, catalog browsing as the home page) are all implemented and verified end-to-end. Scatter-gather/composite multi-domain routing is the one capability not yet built — see `specs/2_coordinator-agent/smartshop-coordinator-agent-spec.md` Section 13 for the full roadmap.
+Data pipeline, coordinator agent (4 sub-agents), API layer (with rate limiting/caching/telemetry), and UI (6 pages, catalog browsing as the home page) are all implemented and verified end-to-end. Scatter-gather/composite multi-domain routing is the one capability not yet built — see `specs/2_coordinator-agent/shopensemble-coordinator-agent-spec.md` Section 13 for the full roadmap.
