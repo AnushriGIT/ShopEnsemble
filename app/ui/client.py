@@ -48,6 +48,26 @@ class SmartshopAPIClient:
             raise SmartshopAPIError(f"Health check failed (HTTP {response.status_code}).")
         return response.json()
 
+    def list_products(self) -> list[dict]:
+        """GET /products and return the full catalog as parsed JSON.
+
+        No caching/rate-limiting on the server side (it's a plain data
+        read, not an LLM call) — the caller (the Browse Catalog page) is
+        expected to cache this itself via ``st.cache_data``, since the
+        catalog doesn't change within a session.
+        """
+
+        try:
+            response = self._client.get("/products")
+        except httpx.ConnectError as error:
+            raise SmartshopAPIError(f"Can't reach the Smartshop API at {self._base_url}.") from error
+        except httpx.TimeoutException as error:
+            raise SmartshopAPIError("The Smartshop API took too long to respond.") from error
+
+        if response.status_code >= 400:
+            raise SmartshopAPIError(f"Request failed (HTTP {response.status_code}).")
+        return response.json()
+
     def query(self, text: str) -> dict:
         """POST /query and return the parsed JSON response body.
 

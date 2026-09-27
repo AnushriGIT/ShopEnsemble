@@ -1,5 +1,13 @@
 """Product comparison — collects 2+ product IDs and composes a query."""
 
+import sys
+from pathlib import Path
+
+# See app/ui/streamlit_app.py's top for why this is needed — `streamlit
+# run` only puts this script's own directory on sys.path, never the
+# project root, and each page here is independently executable.
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
+
 import streamlit as st
 
 from app.ui.client import SmartshopAPIError, get_client
