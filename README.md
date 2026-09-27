@@ -1,4 +1,4 @@
-# Smartshop
+# ShopEnsemble
 
 An AI shopping assistant: a coordinator agent classifies a shopper's natural-language question and routes it to one of four specialist sub-agents — product recommendations, product comparison, review summarization, and store policy/FAQ — backed by a validated PostgreSQL product catalog. Built with [PydanticAI](https://ai.pydantic.dev/), FastAPI, and Streamlit.
 

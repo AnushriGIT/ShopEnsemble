@@ -1,4 +1,4 @@
-"""Integration tests for the Smartshop persistence boundary against a live
+"""Integration tests for the ShopEnsemble persistence boundary against a live
 PostgreSQL instance (started via `docker compose up -d postgres`).
 
 These tests exercise `create_schema`/`persist_batch` for real: schema

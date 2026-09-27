@@ -1,7 +1,7 @@
-"""Validated domain models for the Smartshop catalog and policy datasets.
+"""Validated domain models for the ShopEnsemble catalog and policy datasets.
 
 The models in this module define the typed application boundary for rows read
-from the Smartshop CSV files and for equivalent API payloads. CSV adapters are
+from the ShopEnsemble CSV files and for equivalent API payloads. CSV adapters are
 responsible for converting raw text into values such as ``Decimal``, ``int``,
 and ``date`` before calling Pydantic validation; persistence and API routing
 remain outside this module.
@@ -38,8 +38,8 @@ PolicyType = Literal[
 """The 8 store policy categories used by ``data/store_policies.csv``."""
 
 
-class SmartshopModel(BaseModel):
-	"""Common strict configuration shared by all Smartshop models."""
+class ShopEnsembleModel(BaseModel):
+	"""Common strict configuration shared by all ShopEnsemble models."""
 
 	model_config = ConfigDict(
 		extra="forbid",
@@ -47,7 +47,7 @@ class SmartshopModel(BaseModel):
 	)
 
 
-class Product(SmartshopModel):
+class Product(ShopEnsembleModel):
 	"""A catalog product loaded from ``data/products.csv``."""
 
 	id: ProductId
@@ -60,7 +60,7 @@ class Product(SmartshopModel):
 	rating: Rating
 
 
-class Review(SmartshopModel):
+class Review(ShopEnsembleModel):
 	"""A dated customer review linked to a product identifier."""
 
 	product_id: ProductId
@@ -69,7 +69,7 @@ class Review(SmartshopModel):
 	date: date
 
 
-class StorePolicy(SmartshopModel):
+class StorePolicy(ShopEnsembleModel):
 	"""A store policy from ``data/store_policies.csv``.
 
 	The source CSV stores multiple conditions in one pipe-delimited string.

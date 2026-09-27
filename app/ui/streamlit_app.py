@@ -35,17 +35,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 import streamlit as st
 
-from app.ui.client import SmartshopAPIError, get_client
+from app.ui.client import ShopEnsembleAPIError, get_client
 
-st.set_page_config(page_title="Smartshop Assistant", page_icon="🛍️", layout="wide")
+st.set_page_config(page_title="ShopEnsemble Assistant", page_icon="🛍️", layout="wide")
 
 with st.sidebar:
-    st.subheader("🛍️ Smartshop")
+    st.subheader("🛍️ ShopEnsemble")
     st.caption("Browse the catalog, then dig into a product on any of the other pages")
     try:
         get_client().health()
         st.success("API connected")
-    except SmartshopAPIError as error:
+    except ShopEnsembleAPIError as error:
         st.error(str(error))
 
 st.title("📦 Browse Catalog")
@@ -62,7 +62,7 @@ def _load_products() -> list[dict]:
 
 try:
     products = _load_products()
-except SmartshopAPIError as error:
+except ShopEnsembleAPIError as error:
     st.error(str(error))
 else:
     categories = ["All"] + sorted({product["category"] for product in products})

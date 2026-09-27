@@ -127,13 +127,13 @@ def test_catalog_page_minimum_rating_filter_narrows_results(fake_client_factory)
 
 def test_catalog_page_shows_a_friendly_error_on_api_failure(fake_client_factory):
     st.cache_data.clear()
-    fake_client_factory(products_error="Can't reach the Smartshop API at http://localhost:8000.")
+    fake_client_factory(products_error="Can't reach the ShopEnsemble API at http://localhost:8000.")
 
     at = _app_test("app/ui/streamlit_app.py")
     at.run()
 
     assert not at.exception
-    assert "Can't reach the Smartshop API" in at.error[0].value
+    assert "Can't reach the ShopEnsemble API" in at.error[0].value
 
 
 def test_chat_assistant_page_sends_the_typed_query_and_renders_the_response(fake_client_factory):
@@ -149,14 +149,14 @@ def test_chat_assistant_page_sends_the_typed_query_and_renders_the_response(fake
 
 
 def test_chat_assistant_page_shows_a_friendly_error_on_api_failure(fake_client_factory):
-    fake_client_factory(query_error="Can't reach the Smartshop API at http://localhost:8000.")
+    fake_client_factory(query_error="Can't reach the ShopEnsemble API at http://localhost:8000.")
 
     at = _app_test("app/ui/pages/5_💬_Chat_Assistant.py")
     at.run()
     at.chat_input[0].set_value("anything").run()
 
     assert not at.exception
-    assert "Can't reach the Smartshop API" in at.error[0].value
+    assert "Can't reach the ShopEnsemble API" in at.error[0].value
 
 
 def test_recommendations_page_composes_the_expected_query(fake_client_factory):

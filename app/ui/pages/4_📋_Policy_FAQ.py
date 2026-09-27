@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
 import streamlit as st
 
-from app.ui.client import SmartshopAPIError, get_client
+from app.ui.client import ShopEnsembleAPIError, get_client
 from app.ui.components import render_coordinator_response
 
 st.title("📋 Policy / FAQ Assistant")
@@ -42,7 +42,7 @@ if submitted:
         with st.spinner("Looking up policy..."):
             try:
                 response = get_client().query(query_text)
-            except SmartshopAPIError as error:
+            except ShopEnsembleAPIError as error:
                 st.error(str(error))
             else:
                 render_coordinator_response(response)

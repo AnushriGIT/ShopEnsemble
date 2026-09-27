@@ -1,4 +1,4 @@
-"""Contract tests for the Smartshop Pydantic domain models."""
+"""Contract tests for the ShopEnsemble Pydantic domain models."""
 
 from datetime import date
 from decimal import Decimal

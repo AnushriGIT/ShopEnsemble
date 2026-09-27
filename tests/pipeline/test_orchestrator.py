@@ -1,4 +1,4 @@
-"""Tests for Smartshop pipeline orchestration and dry-run reporting."""
+"""Tests for ShopEnsemble pipeline orchestration and dry-run reporting."""
 
 from pathlib import Path
 

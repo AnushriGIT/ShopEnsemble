@@ -1,4 +1,4 @@
-"""Tests for Smartshop streaming CSV ingestion."""
+"""Tests for ShopEnsemble streaming CSV ingestion."""
 
 from pathlib import Path
 

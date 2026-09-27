@@ -1,4 +1,4 @@
-"""CLI entry point: run the full Smartshop pipeline and record its outcome on disk."""
+"""CLI entry point: run the full ShopEnsemble pipeline and record its outcome on disk."""
 
 from __future__ import annotations
 
@@ -13,14 +13,14 @@ from dotenv import load_dotenv
 
 from app.pipeline.orchestrator import PipelineRunReport, run_full_pipeline
 
-load_dotenv()  # No-op if .env is absent; makes local SMARTSHOP_* values usable.
+load_dotenv()  # No-op if .env is absent; makes local SHOPENSEMBLE_* values usable.
 
-REPORT_ROOT_ENV = "SMARTSHOP_REPORT_ROOT"
-QUARANTINE_ROOT_ENV = "SMARTSHOP_QUARANTINE_ROOT"
-BATCH_SIZE_ENV = "SMARTSHOP_BATCH_SIZE"
-MAX_INVALID_ROWS_ENV = "SMARTSHOP_MAX_INVALID_ROWS"
+REPORT_ROOT_ENV = "SHOPENSEMBLE_REPORT_ROOT"
+QUARANTINE_ROOT_ENV = "SHOPENSEMBLE_QUARANTINE_ROOT"
+BATCH_SIZE_ENV = "SHOPENSEMBLE_BATCH_SIZE"
+MAX_INVALID_ROWS_ENV = "SHOPENSEMBLE_MAX_INVALID_ROWS"
 
-# SMARTSHOP_DATA_ROOT and SMARTSHOP_DATABASE_URL are intentionally not read
+# SHOPENSEMBLE_DATA_ROOT and SHOPENSEMBLE_DATABASE_URL are intentionally not read
 # here: app.pipeline.paths and app.pipeline.persistence already read those
 # two env vars internally when their corresponding parameters are left
 # ``None``. Re-reading them here would create a second source of truth for

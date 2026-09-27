@@ -1,4 +1,4 @@
-"""Pipeline orchestration and dry-run/full-run reporting for Smartshop source data."""
+"""Pipeline orchestration and dry-run/full-run reporting for ShopEnsemble source data."""
 
 from __future__ import annotations  # Evaluate type hints without runtime ordering issues.
 
@@ -74,7 +74,7 @@ class _ValidatedBatches:
 def _run_id() -> str:
     """Create a UTC identifier that is sortable and useful in logs."""
 
-    return datetime.now(timezone.utc).strftime("smartshop-%Y%m%dT%H%M%SZ")
+    return datetime.now(timezone.utc).strftime("shopensemble-%Y%m%dT%H%M%SZ")
 
 
 def _count_rows(source: str, source_rows) -> tuple[list, int]:
@@ -164,7 +164,7 @@ def run_dry_run(
     batch_size: int = 500,
     max_invalid_rows: int = 0,
 ) -> PipelineRunReport:
-    """Validate all Smartshop CSVs without writing to PostgreSQL.
+    """Validate all ShopEnsemble CSVs without writing to PostgreSQL.
 
     ``str | Path | None`` allows a text path, a pathlib path, or the default
     configured data directory. The return annotation promises a run report.
@@ -199,14 +199,14 @@ async def run_full_pipeline(
     backoff_max_seconds: float = 8.0,
     engine: AsyncEngine | None = None,
 ) -> PipelineRunReport:
-    """Validate all Smartshop CSVs, then persist them to PostgreSQL.
+    """Validate all ShopEnsemble CSVs, then persist them to PostgreSQL.
 
     Reuses the same validation phase as ``run_dry_run`` so the fail-fast,
     zero-invalid-row threshold policy is identical between modes; only the
     persistence tail differs. ``engine`` is injectable so callers that
     already manage an engine's lifecycle (tests, long-lived services) can
     pass one in; when omitted, this function creates its own engine from
-    ``database_url`` (or ``SMARTSHOP_DATABASE_URL``/the built-in default)
+    ``database_url`` (or ``SHOPENSEMBLE_DATABASE_URL``/the built-in default)
     and disposes it before returning.
 
     Checkpoint/resume support is intentionally not implemented: at the

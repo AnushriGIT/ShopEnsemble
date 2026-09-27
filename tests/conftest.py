@@ -1,4 +1,4 @@
-"""Shared fixtures for the Smartshop pipeline test suite."""
+"""Shared fixtures for the ShopEnsemble pipeline test suite."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from app.pipeline.persistence import (
 )
 
 # Same env-var-override-with-default idiom as app/main.py's REPORT_ROOT_ENV.
-TEST_REPORT_ROOT_ENV = "SMARTSHOP_TEST_REPORT_ROOT"
+TEST_REPORT_ROOT_ENV = "SHOPENSEMBLE_TEST_REPORT_ROOT"
 DEFAULT_TEST_REPORT_ROOT = "reports/test-results"
 
 

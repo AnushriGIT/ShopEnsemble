@@ -1,4 +1,4 @@
-"""PostgreSQL persistence boundary for validated Smartshop records."""
+"""PostgreSQL persistence boundary for validated ShopEnsemble records."""
 
 from __future__ import annotations
 
@@ -19,13 +19,13 @@ from tenacity import AsyncRetrying, retry_if_exception_type, stop_after_attempt,
 from app.models import Product, Review, StorePolicy
 
 DEFAULT_DATABASE_URL = (
-    "postgresql+asyncpg://smartshop:smartshop@localhost:5432/smartshop"
+    "postgresql+asyncpg://shopensemble:shopensemble@localhost:5432/shopensemble"
 )
-DATABASE_URL_ENV = "SMARTSHOP_DATABASE_URL"
+DATABASE_URL_ENV = "SHOPENSEMBLE_DATABASE_URL"
 
 
 class Base(DeclarativeBase):
-    """Base class collecting Smartshop PostgreSQL table metadata."""
+    """Base class collecting ShopEnsemble PostgreSQL table metadata."""
 
 
 class ProductRecord(Base):

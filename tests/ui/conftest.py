@@ -9,11 +9,11 @@ of PydanticAI's ``TestModel`` or FastAPI's ``dependency_overrides``.
 import pytest
 
 from app.ui import client as client_module
-from app.ui.client import SmartshopAPIError
+from app.ui.client import ShopEnsembleAPIError
 
 
 class FakeClient:
-    """Stand-in for ``SmartshopAPIClient`` — returns a fixed response (or
+    """Stand-in for ``ShopEnsembleAPIClient`` — returns a fixed response (or
     raises a fixed error) instead of making a real HTTP call."""
 
     def __init__(
@@ -38,13 +38,13 @@ class FakeClient:
         self.call_count += 1
         self.last_query = text
         if self._query_error is not None:
-            raise SmartshopAPIError(self._query_error)
+            raise ShopEnsembleAPIError(self._query_error)
         return self._query_response
 
     def list_products(self) -> list[dict]:
         self.list_products_call_count += 1
         if self._products_error is not None:
-            raise SmartshopAPIError(self._products_error)
+            raise ShopEnsembleAPIError(self._products_error)
         return self._products_response
 
 

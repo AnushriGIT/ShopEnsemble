@@ -16,7 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
 import streamlit as st
 
-from app.ui.client import SmartshopAPIError, get_client
+from app.ui.client import ShopEnsembleAPIError, get_client
 from app.ui.components import render_coordinator_response
 
 st.title("💬 Conversational Shopping Assistant")
@@ -46,7 +46,7 @@ if user_query := st.chat_input("What are you looking for?"):
     with st.chat_message("assistant"):
         try:
             response = get_client().query(user_query)
-        except SmartshopAPIError as error:
+        except ShopEnsembleAPIError as error:
             st.error(str(error))
         else:
             render_coordinator_response(response)

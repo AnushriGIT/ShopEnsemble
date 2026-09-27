@@ -1,4 +1,4 @@
-"""Tests for safe Smartshop pipeline path resolution."""
+"""Tests for safe ShopEnsemble pipeline path resolution."""
 
 from pathlib import Path
 

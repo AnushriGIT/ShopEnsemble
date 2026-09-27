@@ -1,4 +1,4 @@
-"""Tests for Smartshop normalization and validation behavior."""
+"""Tests for ShopEnsemble normalization and validation behavior."""
 
 from pathlib import Path
 

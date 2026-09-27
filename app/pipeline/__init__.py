@@ -1,1 +1,1 @@
-"""Smartshop ingestion, ETL, persistence, and orchestration components."""
+"""ShopEnsemble ingestion, ETL, persistence, and orchestration components."""

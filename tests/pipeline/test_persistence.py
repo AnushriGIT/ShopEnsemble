@@ -1,4 +1,4 @@
-"""Contract tests for the Smartshop PostgreSQL persistence boundary."""
+"""Contract tests for the ShopEnsemble PostgreSQL persistence boundary."""
 
 import pytest
 from sqlalchemy.dialects import postgresql

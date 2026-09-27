@@ -1,4 +1,4 @@
-"""Streamlit UI for the Smartshop coordinator agent (Phase 4a).
+"""Streamlit UI for the ShopEnsemble coordinator agent (Phase 4a).
 
 Talks to ``app/api/`` over real HTTP (``httpx``) — never imports
 ``app.agents``/``app.api`` in-process. See

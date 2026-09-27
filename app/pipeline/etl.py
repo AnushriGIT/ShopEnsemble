@@ -1,4 +1,4 @@
-"""Pure normalization, validation, quarantine, and batching for Smartshop rows."""
+"""Pure normalization, validation, quarantine, and batching for ShopEnsemble rows."""
 
 from __future__ import annotations
 
@@ -181,7 +181,7 @@ def iter_validated_batches(
                     raw_values=dict(row.values),
                 )
             )
-            # The curated Smartshop datasets currently use a zero-invalid-row
+            # The curated ShopEnsemble datasets currently use a zero-invalid-row
             # policy; callers can deliberately provide a larger threshold.
             if len(quarantine) > max_invalid_rows:
                 raise ValueError(

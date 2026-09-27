@@ -1,4 +1,4 @@
-"""Safe, configuration-driven paths for the Smartshop data pipeline."""
+"""Safe, configuration-driven paths for the ShopEnsemble data pipeline."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATA_ROOT = PROJECT_ROOT / "data"
-DATA_ROOT_ENV = "SMARTSHOP_DATA_ROOT"
+DATA_ROOT_ENV = "SHOPENSEMBLE_DATA_ROOT"
 
 
 class PipelinePathError(ValueError):
@@ -18,7 +18,7 @@ class PipelinePathError(ValueError):
 def resolve_data_root(data_root: str | Path | None = None) -> Path:
     """Resolve and validate the pipeline data root.
 
-    Explicit arguments take precedence over ``SMARTSHOP_DATA_ROOT``. When no
+    Explicit arguments take precedence over ``SHOPENSEMBLE_DATA_ROOT``. When no
     override is supplied, the repository's project-relative ``data`` folder is
     used. The root must already exist and be a directory.
     """
