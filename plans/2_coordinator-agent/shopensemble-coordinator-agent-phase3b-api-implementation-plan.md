@@ -45,7 +45,7 @@ Section 7 already mandates the catalog and agent clients be built once, not per-
 ### Endpoints
 
 - **`GET /health`** → `{"status": "ok"}`. Minimal per the spec's own minimal ask (no elaborate readiness/liveness split — matches this project's "no production SLA yet" scope discipline, Appendix B).
-- **`POST /query`**, body `QueryRequest{query: str}` (new, `app/api/schemas.py` — `Field(min_length=1, max_length=MAX_QUERY_LENGTH)`, reusing `app.agents.sanitize.MAX_QUERY_LENGTH` for the same bound already enforced one layer down, defense-in-depth per the existing convention from the `review-fix-loop` fix). Calls `handle_query(app_state.coordinator_agent, app_state.sub_agents, app_state.catalog, request.query)` and returns its result directly — `response_model=CoordinatorResponse`, the existing 7-member union, reused as-is; no new response schema needed.
+- **`POST /query`**, body `QueryRequest{query: str}` (new, `app/api/schemas.py` — `Field(min_length=1, max_length=MAX_QUERY_LENGTH)`, reusing `app.agents.sanitize.MAX_QUERY_LENGTH` for the same bound already enforced one layer down, defense-in-depth per the existing convention from the earlier code-review fix). Calls `handle_query(app_state.coordinator_agent, app_state.sub_agents, app_state.catalog, request.query)` and returns its result directly — `response_model=CoordinatorResponse`, the existing 7-member union, reused as-is; no new response schema needed.
 
 ### Error handling — the actual fix for the flagged info-disclosure risk
 

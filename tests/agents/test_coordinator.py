@@ -295,7 +295,7 @@ async def test_policy_faq_agent_has_no_missing_argument_case(monkeypatch: pytest
 async def test_handle_query_sanitizes_the_raw_query_before_it_reaches_any_sub_agent(
     monkeypatch: pytest.MonkeyPatch,
 ):
-    """review-fix-loop finding (2026-09-16): spec Section 10 requires basic
+    """code-review finding (2026-09-16): spec Section 10 requires basic
     prompt-injection delimiter stripping on the raw query before it reaches
     any agent prompt — verify it's actually applied, and that the *same*
     sanitized text is what recommendation_agent/policy_faq_agent receive as

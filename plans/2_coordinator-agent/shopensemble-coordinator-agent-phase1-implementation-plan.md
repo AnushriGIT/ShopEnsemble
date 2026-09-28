@@ -87,7 +87,7 @@ async def handle_query(coordinator_agent, review_agent, catalog: CatalogData, qu
 - `test_coordinator.py` — same `TestModel`/`FunctionModel` mocking, asserting: high confidence → dispatches and returns the review agent's response; mid confidence → returns `clarification_question`, review agent is **not** called (assert via a call-count spy, matching the persistence tests' `calls = {"count": 0}` idiom); low confidence → fallback message, not called; unrecognized `chosen_tool` → `AgentError` envelope.
 - `test_retry.py` — directly ports `test_persistence.py`'s three-test shape onto `call_with_retry`: recovers after N transient OpenAI errors then succeeds; fails after exhausting `max_retries`; does not retry (zero backoff) a non-transient exception.
 
-No test in this suite makes a real OpenAI call or requires `OPENAI_API_KEY` at test time — matches spec Section 12's mocking policy. This test plan is the "present the plan before generating" checkpoint the `test-suite-generator` convention calls for; implementation should generate directly from this list rather than re-deriving it.
+No test in this suite makes a real OpenAI call or requires `OPENAI_API_KEY` at test time — matches spec Section 12's mocking policy. This test plan is the "present the plan before generating" checkpoint the project's test-generation convention calls for; implementation should generate directly from this list rather than re-deriving it.
 
 ## Verification
 

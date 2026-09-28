@@ -168,7 +168,7 @@ Implement only the models and their reusable validation constants/helpers in `ap
 
 ## 10. Required Validation Test Suite
 
-Create `tests/test_models.py` using pytest. The repository has no existing test directory, test configuration, fixtures, or model tests, so follow the default convention from `test-suite-generator`.
+Create `tests/test_models.py` using pytest. The repository has no existing test directory, test configuration, fixtures, or model tests, so follow the project's standard test-generation convention.
 
 The suite MUST cover:
 
@@ -196,7 +196,7 @@ After implementation:
 
 1. Run Python syntax validation for `app/models.py`.
 2. Run the generated suite with `python -m pytest`.
-3. Investigate failures using the test-suite-generator triage workflow, with a maximum of three passes.
+3. Investigate failures using the standard failure-triage workflow, with a maximum of three passes.
 4. Run focused Pydantic construction checks for valid and invalid payloads.
 5. Run project diagnostics/tests if available.
 6. Append a versioned test-generation record to `.agents/memory-bank/testGenerationLog.md` or the repository's established equivalent.

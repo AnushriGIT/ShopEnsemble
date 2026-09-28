@@ -32,9 +32,6 @@ Implement (`app/ui/components.py::_render_fallback`): swap the call.
 ## Task 4 — Eval + real end-to-end
 Add one golden case (real API): "HI how are you you" → response contains "ShopEnsemble" and offers help, with the routing/model call count unaffected by this addition (a code-level check, not an LLM assertion, since the deterministic path makes no model call to evaluate). Run fast + integration + eval once; lint the exact touched files (explicit list, not a timestamp glob — see Phase 6's process-mistake note); restart the live app and verify the reported message live, plus a mixed "hi, recommend a laptop" case still classifies normally.
 
-## SpecToolBox update
-Add a small, generalizable checklist item to Section 4 (Routing) and the cost-optimization section of `4_COORDINATOR_AGENT_SPEC_TEMPLATE.md`: detect pure chitchat/greetings deterministically (no LLM call) rather than routing them through classification, and give every "couldn't help" message a consistent, capability-describing line instead of a bare apology — narrow-match the chitchat detector (whole-message vocabulary check) so it never swallows a real request.
-
 ---
 
 **Version**: 2.0 (implemented)

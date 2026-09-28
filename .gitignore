@@ -22,7 +22,7 @@ AGENTS.md
 
 # Kept local-only: internal working notes and raw course/reference material,
 # not needed to build, run, or understand the shipped project. specs/ (what
-# was built and why), plans/ (how), skills/ (tooling), and app/agents+api
+# was built and why), plans/ (how), and app/agents+api
 # (the actual implementation) are all tracked — see README.md.
 memory-bank/
 DATA_PIPELINE_RESOURCES.md

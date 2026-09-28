@@ -51,7 +51,7 @@ def test_query_rejects_a_query_over_the_max_length(client: TestClient):
 
 
 def test_query_never_leaks_a_raw_internal_exception_message(app_state_factory, routing_decision, monkeypatch):
-    """review-fix-loop follow-through: the global exception handler is the
+    """code-review follow-through: the global exception handler is the
     actual fix for the info-disclosure risk Appendix A flagged against
     reusing app/agents/cli.py's raw-exception-print pattern here.
 

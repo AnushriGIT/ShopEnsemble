@@ -1,7 +1,7 @@
 # ShopEnsemble Pipeline: Phase 4 (Persistence Integration) + Phase 5 (Full-Run Orchestration)
 
 **Status:** ✅ Implemented and verified (2026-09-13) — 56/56 tests passing, real end-to-end run against PostgreSQL confirmed idempotent via both pytest and direct CLI invocation
-**Generated from:** `skills/SpecToolBox/3_FULL_DATA_PIPELINE_SPEC_TEMPLATE.md` (generic sections 4.3 Mode 2, 6.4 Phase 4, 6.5 Phase 5, 7.2)
+**Generated from:** the standard full-data-pipeline spec template (generic sections 4.3 Mode 2, 6.4 Phase 4, 6.5 Phase 5, 7.2)
 **Governing spec:** [specs/1_data-pipeline/data_pipeline_shopensemble_spec.md](../../specs/1_data-pipeline/data_pipeline_shopensemble_spec.md)
 **Test generation log:** [.agents/memory-bank/testGenerationLog.md](../../.agents/memory-bank/testGenerationLog.md) (v3 entry)
 
@@ -13,7 +13,7 @@
 
 ## Context
 
-The ShopEnsemble pipeline currently only validates data (`run_dry_run()` in `app/pipeline/orchestrator.py`) — it reads all 3 CSVs (2,000 products / 4,000 reviews / 22 policies), normalizes, validates, batches, and reports, but **never writes to PostgreSQL**. This is Phase 1-3 of `skills/SpecToolBox/3_FULL_DATA_PIPELINE_SPEC_TEMPLATE.md` and it's complete and tested (42 passing tests).
+The ShopEnsemble pipeline currently only validates data (`run_dry_run()` in `app/pipeline/orchestrator.py`) — it reads all 3 CSVs (2,000 products / 4,000 reviews / 22 policies), normalizes, validates, batches, and reports, but **never writes to PostgreSQL**. This is Phase 1-3 of the standard full-data-pipeline spec template and it's complete and tested (42 passing tests).
 
 The persistence layer (`app/pipeline/persistence.py`) already has working schema definitions and upsert logic (`create_engine`, `create_schema`, `persist_batch`) — but it has **zero tests against a real database**, no retry logic (only a placeholder `retries: int = 0` field), and nothing calls it end-to-end. There is no `run_full_pipeline()` anywhere, despite being referenced throughout `specs/1_data-pipeline/shopensemble-implementation-guide.md` and `.env.example` (`SHOPENSEMBLE_BATCH_SIZE`, `SHOPENSEMBLE_MAX_INVALID_ROWS`, `SHOPENSEMBLE_REPORT_ROOT`, `SHOPENSEMBLE_QUARANTINE_ROOT` are all declared but read by no code).
 
@@ -89,7 +89,7 @@ Schema creates exactly 3 tables; product upsert overwrites in place; review FK v
 End-to-end against real `data/` CSVs: `run_full_pipeline()` returns `status="success"`, `rows_persisted == {"products": 2000, "reviews": 4000, "policies": 22}`, `batch_count > 0`; rerun is idempotent (same counts, no errors); a validation failure (reused threshold-exceeded tmp-CSV pattern from `test_orchestrator.py`) raises `ValueError` with `error.pipeline_report.status == "failed"` and leaves the DB untouched; passing an explicit `engine=` leaves it undisposed after the call.
 
 ### 10. `.agents/memory-bank/testGenerationLog.md`
-Append a `v3` entry per the existing convention (Target source, Generated tests, Discovery, Coverage rationale, Mocks, execution results, Triage, Committed) covering the new persistence/full-pipeline tests, following the `test-suite-generator` skill workflow before generating them.
+Append a `v3` entry per the existing convention (Target source, Generated tests, Discovery, Coverage rationale, Mocks, execution results, Triage, Committed) covering the new persistence/full-pipeline tests, following the project's standard test-generation workflow before generating them.
 
 ---
 

@@ -8,7 +8,7 @@
 
 ## Context / Narrative
 
-Two failures were reported from real use of the Phase 5 chat, both reproduced against the live app before this spec was written (per the SpecToolBox lesson this project's own template now records).
+Two failures were reported from real use of the Phase 5 chat, both reproduced against the live app before this spec was written (a practice this project follows for every new feature).
 
 **Failure A — no tool answers a question about products already shown.** After a recommendation ("suggest me a laptop under $1000"), asking "which one is best" or "which is the cheapest" returned the generic fallback about half the time, and a *fresh, unrelated* recommendation the other half. Reproduced live, 2 runs. Root cause: the coordinator has exactly 4 tools (reviews, recommend, compare, policy), and none of them means "judge the products already on screen" — `recommendation_agent` always re-searches the whole catalog from scratch, discarding what was just shown.
 

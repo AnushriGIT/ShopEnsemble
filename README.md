@@ -11,7 +11,6 @@ Built with [PydanticAI](https://ai.pydantic.dev/) (OpenAI `gpt-4o-mini`), FastAP
 - **Deterministic where there's one right answer.** "Which one is the cheapest?" is computed in code from the catalog, not asked of the LLM — free, instant, and never wrong. The LLM is reserved for genuinely subjective judgments.
 - **A real evaluation harness, not spot-checks.** A 42-case routing-accuracy suite and a golden-conversation suite run against the live OpenAI API; the current measured routing accuracy is **100% (42/42)**, iterated up from an initial 93.1% baseline.
 - **Spec-driven, test-first development.** Every feature has a written spec (narrative + Gherkin scenarios + a decision log) and an implementation plan under `specs/`/`plans/`, built test-first with a fast, DB-free unit suite plus separate integration and real-API eval suites.
-- **A generalized process, not one-off code.** `skills/SpecToolBox/` holds the reusable spec templates this project's own specs were built from, refined with lessons (session-ID handling, cache partitioning, deterministic guards) fed back in as the project grew.
 
 ## Architecture
 
@@ -110,7 +109,6 @@ data/                      # source CSVs (products, reviews, store_policies)
 tests/                     # mirrors app/ — pipeline, agents, api, ui
 specs/                      # specifications: narrative + Gherkin scenarios + decision logs
 plans/                      # implementation plans, one per spec, mirrored folder structure
-skills/SpecToolBox/         # reusable spec/plan templates this project's own specs were built from
 ```
 
 ## Testing
@@ -127,7 +125,6 @@ Mocking policy: `pydantic_ai.models.test.TestModel`/`FunctionModel` stand in for
 
 - **Specs**: `specs/1_data-pipeline/`, `specs/2_coordinator-agent/` — what's built, requirements, decision logs, one living document per domain, updated in place as the project grew (Phases 1–7).
 - **Plans**: `plans/1_data-pipeline/`, `plans/2_coordinator-agent/` — the approved implementation plan behind each spec, including post-implementation notes on what was found and fixed along the way.
-- **SpecToolBox**: `skills/SpecToolBox/` — the reusable templates behind every spec here, generalized as the project's own specs surfaced real lessons (session-ID handling, cache partitioning, deterministic reference resolution, chitchat detection).
 
 ## Status
 

@@ -16,9 +16,9 @@
 
 `specs/2_coordinator-agent/shopensemble-coordinator-agent-spec.md` Section 13 marks **Phase 3** as "⏳ Planned": an evaluation harness (Section 12) and a FastAPI layer (Section 1/7). Per your scoping decision, **this plan covers only the evaluation harness** — it measures what Phases 1-2 actually built, needs no new production surface, and its result (a real baseline number) is what Section 11's "Routing accuracy: TBD — set once a baseline exists" is waiting on. The FastAPI layer is deferred to its own follow-up plan.
 
-Verified via Explore agent: no eval/golden-dataset file exists anywhere yet; `app/agents/coordinator.py`, `models.py`, `cli.py` are unchanged since Phase 2; both governing specs (`shopensemble-coordinator-agent-spec.md` Section 12, `shopensemble-project-requirements.md` Section 9) explicitly require this work to go through `skills/test-suite-generator`'s discovery-then-plan-then-build process — this plan **is** that process's Step 1-2 output (discovery already done via Explore agent above; the plan below is the draft test plan), so implementation should generate directly from it rather than re-deriving.
+Verified via Explore agent: no eval/golden-dataset file exists anywhere yet; `app/agents/coordinator.py`, `models.py`, `cli.py` are unchanged since Phase 2; both governing specs (`shopensemble-coordinator-agent-spec.md` Section 12, `shopensemble-project-requirements.md` Section 9) explicitly require this work to go through a discovery-then-plan-then-build test-generation process — this plan **is** that process's Step 1-2 output (discovery already done via Explore agent above; the plan below is the draft test plan), so implementation should generate directly from it rather than re-deriving.
 
-Known-bug mining (test-suite-generator Step 1.2, from `testGenerationLog.md`'s `v5` entry) surfaces 2 real bugs worth encoding as explicit golden-set regression cases: the category-pluralization miss (`"recommend a cheap speaker"`) and the policy-matching fix (`"what's your return policy for laptops?"`).
+Known-bug mining (test-generation Step 1.2, from `testGenerationLog.md`'s `v5` entry) surfaces 2 real bugs worth encoding as explicit golden-set regression cases: the category-pluralization miss (`"recommend a cheap speaker"`) and the policy-matching fix (`"what's your return policy for laptops?"`).
 
 ---
 

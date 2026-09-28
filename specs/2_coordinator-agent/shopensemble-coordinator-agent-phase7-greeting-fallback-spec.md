@@ -63,7 +63,6 @@ app/agents/coordinator.py   # greeting detection + capability blurb constants + 
 app/ui/components.py        # _render_fallback: st.warning -> st.info
 tests/agents/test_coordinator.py — extended
 tests/ui/test_components.py — extended
-skills/SpecToolBox/4_COORDINATOR_AGENT_SPEC_TEMPLATE.md — generalized lesson added
 ```
 
 ## Decision Log

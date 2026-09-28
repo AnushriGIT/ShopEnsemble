@@ -1,6 +1,6 @@
 """Tests for basic prompt-injection defenses (spec Section 10).
 
-review-fix-loop finding (2026-09-16): the spec commits to "basic
+code-review finding (2026-09-16): the spec commits to "basic
 prompt-injection delimiter stripping on the raw user query... cheap to add
 now, do it in Phase 1" but no such sanitization existed anywhere in
 app/agents/ — confirmed via a repo-wide grep. This module and these tests

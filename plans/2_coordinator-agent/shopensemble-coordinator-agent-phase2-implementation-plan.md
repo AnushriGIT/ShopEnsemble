@@ -112,7 +112,7 @@ Build the 3 new agents at startup alongside the existing 2, wrap in `SubAgents(.
 
 - `specs/2_coordinator-agent/shopensemble-coordinator-agent-spec.md`: Section 3's "Roadmap phase" column for the 3 newly-shipped sub-agents; Section 13's Phase 2 row (partial ✅ — scatter-gather still ⏳); new Appendix A rows for the flat-fields extraction decision (now resolved) and the `SubAgents` container refactor.
 - `.agents/memory-bank/testGenerationLog.md`: append a `v5` entry, same format as `v4`.
-- `Reference/Learning/coordinator-agent/` pair: update in place (not a new file) — add the 3 new sub-agents to the reference doc's module table and a new diagram/section for their dispatch flow, per the `knowledge-artifact-doc` skill.
+- `Reference/Learning/coordinator-agent/` pair: update in place (not a new file) — add the 3 new sub-agents to the reference doc's module table and a new diagram/section for their dispatch flow, per the project's knowledge-artifact convention.
 - Copy this approved plan into `specs/2_coordinator-agent/shopensemble-coordinator-agent-phase2-implementation-plan.md`, matching the Phase 1 precedent.
 
 ## Out of scope for this plan

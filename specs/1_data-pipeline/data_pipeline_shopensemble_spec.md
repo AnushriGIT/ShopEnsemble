@@ -1,7 +1,7 @@
 # ShopEnsemble Data Pipeline Requirements
 
 **Status:** Project-specific draft for review before implementation  
-**Generated from:** `skills/SpecToolBox/DATA_PIPELINE_SPEC_TEMPLATE.md`  
+**Generated from:** the standard data-pipeline requirements spec template  
 **Project:** ShopEnsemble  
 **Python:** 3.12  
 **Primary sources:** `data/products.csv`, `data/reviews.csv`, `data/store_policies.csv`
@@ -289,7 +289,7 @@ Required coverage:
 - Persistence success, duplicate/upsert behavior, transient failures, permanent failures, and verification.
 - Run metrics and sanitized quarantine output.
 
-Before generating tests, apply the `test-suite-generator` workflow, present the test plan for approval, run focused tests first, triage failures, and record the result in `.agents/memory-bank/testGenerationLog.md`.
+Before generating tests, apply the project's standard test-generation workflow, present the test plan for approval, run focused tests first, triage failures, and record the result in `.agents/memory-bank/testGenerationLog.md`.
 
 ## 13. Gherkin Acceptance Scenarios
 

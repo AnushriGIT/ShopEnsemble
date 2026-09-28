@@ -16,7 +16,7 @@
   6. **Per-turn product IDs capped** at 10 like every other bound.
 - **Prompt work for Part A took three measured iterations** (Rule 15 — one hypothesis at a time, measured with repeated runs, refuted ones reverted): (a) the citation rule made the speaker-recommendation groundedness eval fail ~1 run in 6 (A/B: 10/10 without the rule) because rationales started naming candidates the model hadn't picked → added "only name products you actually picked" (15/15); (b) reordering the judge's FACTS was tried and **refuted, then reverted**; (c) the model wrote `Name (Brand)` instead of `Name (ID)` because the data lines look like that → added "only the ID inside the parentheses" (both ID-citing evals 12/12).
 - **Test-authoring bug caught by the eval, not the model:** the ID-citing check compared every same-*named* product's ID, but the catalog reuses names ("Pro Book" is many laptops); it now groups by name.
-- **Lint discovery:** the `code-linter` script never lints `app/agents/`, `app/api/`, `tests/agents/` (ruff honors `.gitignore` for directory walks, unlike explicitly passed files), so its "20 findings" excluded most of this work. Passing the touched files explicitly found 27 fixable findings (import order, unused imports/`noqa`), all fixed; `B008` (FastAPI `Depends` in defaults) left as the codebase's existing idiom (Rule 12).
+- **Lint discovery:** the project's lint script never lints `app/agents/`, `app/api/`, `tests/agents/` (ruff honors `.gitignore` for directory walks, unlike explicitly passed files), so its "20 findings" excluded most of this work. Passing the touched files explicitly found 27 fixable findings (import order, unused imports/`noqa`), all fixed; `B008` (FastAPI `Depends` in defaults) left as the codebase's existing idiom (Rule 12).
 - **Known limitations, accepted:** memory is per-process (single uvicorn worker); concurrent requests in one session are last-write-wins; an attacker could churn through new session IDs to evict others within the 1000-session cap (bounded by the per-IP rate limit; no auth exists project-wide); a stateless request still has no ID guard (pre-existing — the model can invent IDs from prompt examples there too; worth a follow-up).
 - **Not committed.** All work is in the working tree; commit only on request.
 
@@ -172,13 +172,13 @@ Extend the existing sets (spec: "new multi-turn cases are added to the same eval
 ## Task 9 — Completion gates (Rules 8, 9, 13, 14)
 
 1. **Fast + integration + eval green** (record counts; expected fast ≈ 162 + new).
-2. **Lint (Rule 14):** `bash skills/code-linter/scripts/lint.sh` — fix findings only in files this work touched; the 20 pre-existing findings elsewhere stay for a separate pass.
+2. **Lint (Rule 14):** run `ruff check` on the touched files — fix findings only in files this work touched; the 20 pre-existing findings elsewhere stay for a separate pass.
 3. **Rule 9 — real end-to-end**, against the running app on the renamed stack:
    - Chat: "compare SP0001 with LP0002" → "Provide the review summary of both products" → two summaries labelled SP0001, LP0002.
    - "the cheaper one" / "what about under $500?" flows; **New chat** then repeat message 2 → clarification.
    - `logs/api.log` (Rule 17, already rotating) shows `routing_decision … context_turns>0` on turn 2 and a `session=` 8-char prefix; `grep -E '[a-f0-9]{32}' logs/api.log` finds no session id.
-4. **Security Gate (Rule 13):** run `review-fix-loop`'s Security Gate over the diff using `stride-threat-model`'s 6 pillars, seeded with spec B10's table (session-ID bearer secret, forged history, cross-session read, unbounded growth, ID smuggling). Findings and fixes go in the review log.
-5. **Knowledge artifact (Rule 8):** update in place under `Reference/Learning/coordinator-agent/` via the `knowledge-artifact-doc` skill — reference doc + the sequence-diagram HTML (new "session memory turn" flow) + the standalone local diagram copy; both diagram files updated together.
+4. **Security Gate (Rule 13):** run a code-review Security Gate over the diff using a STRIDE threat model's 6 pillars, seeded with spec B10's table (session-ID bearer secret, forged history, cross-session read, unbounded growth, ID smuggling). Findings and fixes go in the review log.
+5. **Knowledge artifact (Rule 8):** update in place under `Reference/Learning/coordinator-agent/` per the project's knowledge-artifact convention — reference doc + the sequence-diagram HTML (new "session memory turn" flow) + the standalone local diagram copy; both diagram files updated together.
 
 ---
 
@@ -188,7 +188,6 @@ Extend the existing sets (spec: "new multi-turn cases are added to the same eval
 - This plan's Status → ✅ with an **Implementation Notes** section (what differed from the plan, and any test-authoring discoveries — as the Phase 4b/4c plans do).
 - The Phase 5 spec's Status → ✅ and its Verification section with observed results.
 - `.agents/memory-bank/testGenerationLog.md` new entry; `.agents/memory-bank/activeContext.md` entry (Rule 4).
-- `skills/SpecToolBox/4_COORDINATOR_AGENT_SPEC_TEMPLATE.md` — already updated with this phase's reusable lessons; add anything new the implementation surfaces.
 
 ## Risks & how they're contained
 

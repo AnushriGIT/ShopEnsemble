@@ -859,7 +859,7 @@ LOG_LEVEL=INFO
 
 - **Sequence Flow Diagram**: `/Reference/Learning/datapipeline/pipeline-sequence-flow.html`
 - **Command & API Reference**: `/Reference/Learning/datapipeline/pipeline-reference.md`
-- **Template**: `/skills/SpecToolBox/FULL_DATA_PIPELINE_SPEC_TEMPLATE.md`
+- **Template**: the standard full-data-pipeline implementation-guide template
 
 ---
 
@@ -906,6 +906,6 @@ python app/main.py
 - **v1.0** (2026-09-10): Initial specification
   - Phase 1 (Dry Run) complete
   - Phases 2-5 planned
-  - Generic template created for SpecToolBox
+  - Generic reusable template created
 
 **Next Review**: After Phase 2 completion

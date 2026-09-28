@@ -30,7 +30,7 @@ class QueryRequest(ShopEnsembleModel):
     defense-in-depth at the HTTP boundary itself, not a replacement for
     ``handle_query``'s own ``sanitize_query()`` call one layer down (same
     two-layer pattern already used for ``RecommendationRequest.query``/
-    ``PolicyRequest.question`` after the review-fix-loop pass).
+    ``PolicyRequest.question`` after the code-review pass).
     """
 
     query: str = Field(min_length=1, max_length=MAX_QUERY_LENGTH)

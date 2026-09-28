@@ -106,7 +106,7 @@ def test_recommendation_request_rejects_a_non_positive_max_price():
 
 
 def test_recommendation_request_rejects_a_query_over_the_max_length():
-    """review-fix-loop finding (2026-09-16): query had no upper bound at all."""
+    """code-review finding (2026-09-16): query had no upper bound at all."""
     with pytest.raises(ValidationError):
         RecommendationRequest(query="a" * (MAX_QUERY_LENGTH + 1))
 
@@ -132,7 +132,7 @@ def test_policy_request_rejects_an_unknown_policy_type():
 
 
 def test_policy_request_rejects_a_question_over_the_max_length():
-    """review-fix-loop finding (2026-09-16): question had no upper bound at all."""
+    """code-review finding (2026-09-16): question had no upper bound at all."""
     with pytest.raises(ValidationError):
         PolicyRequest(question="a" * (MAX_QUERY_LENGTH + 1))
 

@@ -352,7 +352,7 @@ set -a; . ./.env; set +a
 .venv/bin/python -m pytest -q -m eval
 
 # Lint the files touched (Rule 14)
-bash skills/code-linter/scripts/lint.sh
+ruff check <touched files>
 
 # Real end-to-end (Rule 9) — the customer's own example, against the running app:
 #   Chat page: "compare SP0001 with LP0002"  ->  "Provide the review summary of both products"

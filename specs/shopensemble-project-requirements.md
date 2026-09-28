@@ -3,7 +3,6 @@
 **Status:** Project-specific requirements draft for review  
 **Project:** ShopEnsemble AI  
 **Python:** 3.12  
-**Primary toolkit references:** `skills/SpecToolBox/Data_Model_Spec_Template.md`, `skills/SpecToolBox/DATA_PIPELINE_SPEC_TEMPLATE.md`
 
 ## Table of Contents
 
@@ -183,7 +182,7 @@ Required test areas:
 - Agent/tool contract tests with deterministic fixtures.
 - LLM evaluation dataset for policy/FAQ and at least one additional capability.
 
-Use `test-suite-generator` before creating each suite. Present the plan first, triage failures, do not weaken assertions, and append results to `.agents/memory-bank/testGenerationLog.md`.
+Follow the project's test-generation workflow before creating each suite. Present the plan first, triage failures, do not weaken assertions, and append results to `.agents/memory-bank/testGenerationLog.md`.
 
 ## 10. Delivery Roadmap
 
